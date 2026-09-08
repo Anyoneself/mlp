@@ -8,13 +8,21 @@
 
 使用 Ray Distributed Executor 将 vLLM 部署到多个 GPU 节点。
 
-## 执行步骤
+## 实现说明
+
+- KubeRay 清单为每个 GPU Worker 注册一致的逻辑资源和网络配置。
+- 启动入口在创建模型前检查 Ray 节点、GPU 数和 Placement Group 是否满足并行拓扑。
+- 压测、指标和故障时间线继续复用任务 32-33 的统一格式。
+
+## 学习与复现
 
 1. 确认每个 Ray Worker 的 GPU 与网络资源注册正确。
 2. 使用 Placement Group 验证所需资源可同时满足。
 3. 配置 TP/PP 并启动跨节点服务。
 4. 记录跨节点通信、启动时间和推理指标。
 5. 删除一个 Worker，观察服务失败与恢复边界。
+6. 先用简单 Ray GPU Task 验证多节点资源，再启动 vLLM，减少问题叠加。
+7. 扩展实验：保持总 GPU 数不变，对比单节点与跨节点拓扑。
 
 ## 验收标准
 

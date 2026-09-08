@@ -8,13 +8,21 @@
 
 观察 veRL 如何使用 Ray WorkerGroup 编排 Rollout、Reward 和训练 Worker。
 
-## 执行步骤
+## 实现说明
+
+- `config.yaml` 固定模型、数据、Worker 数、并行策略和输出目录。
+- `inspect.py` 从 Ray State API 收集 Actor、Placement Group、节点和逻辑资源映射。
+- `timeline.md` 记录 Rollout、Reward、参数同步和 Update 的开始结束时间及 GPU 利用率。
+
+## 学习与复现
 
 1. 选择资源可承受的 veRL 最小官方示例。
 2. 记录 Ray Actor、Placement Group 和 GPU 映射。
 3. 跟踪一次 Rollout 到参数更新的时序。
 4. 采集各阶段执行时间和 GPU 空闲时间。
 5. 分析参数同步和阶段屏障。
+6. 先按官方最小配置完成一次 dry run，再启用状态采集，避免同时引入多个变量。
+7. 扩展实验：只改变 rollout 数量或 Worker 数，观察瓶颈是否迁移。
 
 ## 验收标准
 

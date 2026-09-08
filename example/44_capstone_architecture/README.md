@@ -8,13 +8,21 @@
 
 设计面向推荐或广告场景的 CPU 预处理、GPU 推理和 CPU 后处理平台。
 
-## 执行步骤
+## 实现说明
+
+- `requirements.md` 固化流量、SLO、模型大小、上下文长度、故障域、安全和成本假设。
+- `architecture.md` 分别描述直接 vLLM 与 KubeRay 方案，明确三层调度边界。
+- `capacity.py` 根据并发、服务时间、目标利用率和冗余计算副本与 GPU 容量。
+
+## 学习与复现
 
 1. 明确流量、模型、SLO、数据安全和故障域假设。
 2. 划分 Gateway、Ray Serve、CPU/GPU Worker 和存储组件。
 3. 标注 Kubernetes、Ray 和模型 Runtime 三层调度职责。
 4. 估算峰值 QPS、并发、GPU 数量和冗余容量。
 5. 设计直接 vLLM 与 KubeRay 两套对比架构。
+6. 用任务 35 的压测结果校准容量参数，禁止只按理论峰值估算。
+7. 扩展实验：将单 Zone 改为双 Zone，重新计算冗余与跨 Zone 成本。
 
 ## 验收标准
 

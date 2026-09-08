@@ -8,13 +8,21 @@
 
 组合 Task、Actor、Object Store、资源声明和 Placement Group，构建完整处理流水线。
 
-## 执行步骤
+## 实现说明
+
+- `main.py` 负责初始化 Ray、提交请求和汇总指标；读取、预处理、推理、后处理分别使用独立函数或 Actor。
+- 模型 Actor 长期持有模型状态并声明 GPU；无 GPU 时用自定义资源模拟调度，仅验证编排逻辑。
+- 每个阶段返回结果和时间戳，最终报告排队时间、执行时间、失败次数与端到端耗时。
+
+## 学习与复现
 
 1. 实现数据读取和 CPU 预处理 Task。
 2. 实现长期存活的模型 Actor，并声明 GPU 或模拟资源。
 3. 实现 CPU 后处理 Task。
 4. 使用 ObjectRef 串联各阶段，使用 Placement Group 控制资源位置。
 5. 注入任务失败并记录重试、排队和执行时间。
+6. 先以本地模拟资源运行 `python example/26_ray_mixed_pipeline/main.py`，再在多节点 Ray 集群使用相同输入复验。
+7. 扩展实验：改变模型 Actor 数量，观察吞吐、排队时间和资源占用。
 
 ## 验收标准
 

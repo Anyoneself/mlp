@@ -8,13 +8,20 @@
 
 验证 PriorityClass、Preemption 与 PodDisruptionBudget 的协同行为和限制。
 
-## 执行步骤
+## 实现说明
+
+- 用固定资源请求构造节点满载环境，高低优先级工作负载分别放在独立 YAML。
+- 采集 Pod Events、`nominatedNodeName`、被抢占 Pod 终止时间和高优先级 Pod 就绪时间。
+- PDB 场景与无 PDB 场景保持其他条件一致，避免把控制器副本差异误判为 PDB 效果。
+
+## 学习与复现
 
 1. 创建高、低两级 PriorityClass。
 2. 用低优先级 Pod 填满测试节点。
 3. 提交高优先级 Pod 并观察抢占候选。
 4. 为低优先级服务添加 PDB 后重复实验。
 5. 记录被提名节点、驱逐过程和调度延迟。
+6. 扩展实验：设置 `preemptionPolicy: Never`，比较高优先级 Pod 的行为。
 
 ## 验收标准
 

@@ -8,13 +8,20 @@
 
 理解 Pod、Node、Namespace、Deployment、Service 的关系和职责边界。
 
-## 执行步骤
+## 实现说明
+
+- 使用 Namespace 隔离实验资源，Deployment 管理无状态应用副本，Service 提供稳定访问入口。
+- YAML 拆分为命名空间、工作负载和服务三个文件，便于单独观察每类对象。
+- 应用提供健康检查端点，并在 Pod 模板中配置资源和探针。
+
+## 学习与复现
 
 1. 创建独立 Namespace。
 2. 部署一个包含 requests/limits 的 Deployment。
 3. 创建 ClusterIP Service 并验证访问。
 4. 扩缩 Deployment，观察 Pod 与 ReplicaSet 变化。
 5. 删除单个 Pod，观察控制器恢复行为。
+6. 扩展实验：把副本数改为 3，比较 Pod IP 与 Service 地址是否变化。
 
 ## 验收标准
 
